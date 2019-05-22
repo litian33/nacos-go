@@ -19,6 +19,7 @@ type RegisterServiceInstanceParam struct {
 	Metadata    map[string]string `param:"metadata"`
 	ClusterName string            `param:"clusterName"`
 	ServiceName string            `param:"serviceName"`
+	Ephemeral   bool              `param:"ephemeral"`
 }
 
 type LogoutServiceInstanceParam struct {
