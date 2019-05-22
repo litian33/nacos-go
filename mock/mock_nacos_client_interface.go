@@ -6,9 +6,9 @@ package mock
 
 import (
 	gomock "github.com/golang/mock/gomock"
-	constant "github.com/peggypig/nacos-go/common/constant"
-	http_agent "github.com/peggypig/nacos-go/common/http_agent"
-	vo "github.com/peggypig/nacos-go/vo"
+	constant "github.com/litian33/nacos-go/common/constant"
+	http_agent "github.com/litian33/nacos-go/common/http_agent"
+	vo "github.com/litian33/nacos-go/vo"
 	reflect "reflect"
 )
 

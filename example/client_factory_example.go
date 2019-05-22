@@ -2,9 +2,9 @@ package example
 
 import (
 	"fmt"
-	"github.com/peggypig/nacos-go/clients"
-	"github.com/peggypig/nacos-go/common/constant"
-	"github.com/peggypig/nacos-go/vo"
+	"github.com/litian33/nacos-go/clients"
+	"github.com/litian33/nacos-go/common/constant"
+	"github.com/litian33/nacos-go/vo"
 )
 
 /**

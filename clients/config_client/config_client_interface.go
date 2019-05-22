@@ -1,7 +1,7 @@
 package config_client
 
 import (
-	"github.com/peggypig/nacos-go/vo"
+	"github.com/litian33/nacos-go/vo"
 )
 
 /**

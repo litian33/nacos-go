@@ -6,7 +6,7 @@ package mock
 
 import (
 	gomock "github.com/golang/mock/gomock"
-	vo "github.com/peggypig/nacos-go/vo"
+	vo "github.com/litian33/nacos-go/vo"
 	reflect "reflect"
 )
 

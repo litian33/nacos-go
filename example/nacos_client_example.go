@@ -2,10 +2,10 @@ package example
 
 import (
 	"fmt"
-	"github.com/peggypig/nacos-go/clients/nacos_client"
-	"github.com/peggypig/nacos-go/common/constant"
-	"github.com/peggypig/nacos-go/common/http_agent"
-	"github.com/peggypig/nacos-go/vo"
+	"github.com/litian33/nacos-go/clients/nacos_client"
+	"github.com/litian33/nacos-go/common/constant"
+	"github.com/litian33/nacos-go/common/http_agent"
+	"github.com/litian33/nacos-go/vo"
 )
 
 /**

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/peggypig/nacos-go/example"
+	"github.com/litian33/nacos-go/example"
 	"time"
 )
 

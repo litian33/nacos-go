@@ -2,11 +2,11 @@ package clients
 
 import (
 	"errors"
-	"github.com/peggypig/nacos-go/clients/config_client"
-	"github.com/peggypig/nacos-go/clients/nacos_client"
-	"github.com/peggypig/nacos-go/clients/service_client"
-	"github.com/peggypig/nacos-go/common/constant"
-	"github.com/peggypig/nacos-go/common/http_agent"
+	"github.com/litian33/nacos-go/clients/config_client"
+	"github.com/litian33/nacos-go/clients/nacos_client"
+	"github.com/litian33/nacos-go/clients/service_client"
+	"github.com/litian33/nacos-go/common/constant"
+	"github.com/litian33/nacos-go/common/http_agent"
 )
 
 /**

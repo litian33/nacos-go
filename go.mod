@@ -1,4 +1,4 @@
-module github.com/peggypig/nacos-go
+module github.com/litian33/nacos-go
 
 require (
 	github.com/golang/mock v1.2.0
