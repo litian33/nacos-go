@@ -444,6 +444,20 @@ func getServiceInstance(agent http_agent.IHttpAgent, path string, timeoutMs uint
 	return
 }
 
+func (client *ServiceClient) KeepAlive(param vo.KeepAliveParam) (err error) {
+	client.mutex.Lock()
+	defer client.mutex.Unlock()
+	if client.beating {
+		err = errors.New("[client.StartBeatTask] client is beating,do not operator repeat")
+	}
+	// 开启任务
+	if err == nil {
+		client.beating = true
+		client.startKeepAliveTask(param)
+	}
+	return
+}
+
 // 开始发送心跳的任务  只有在service.healthCheckMode = client的情况下才有效
 func (client *ServiceClient) StartBeatTask(param vo.BeatTaskParam) (err error) {
 	client.mutex.Lock()
@@ -457,6 +471,23 @@ func (client *ServiceClient) StartBeatTask(param vo.BeatTaskParam) (err error) {
 		client.startBeatTask(param)
 	}
 	return
+}
+func (client *ServiceClient) startKeepAliveTask(param vo.KeepAliveParam) {
+	go func() {
+		for {
+			clientConfig, serverConfigs, agent, errInner := client.sync()
+			// 创建计时器
+			var timer *time.Timer
+			if errInner == nil {
+				timer = time.NewTimer(time.Duration(clientConfig.BeatInterval) * time.Millisecond)
+			}
+			errInner = client.keepAliveTask(clientConfig, serverConfigs, agent, param)
+			if errInner != nil {
+				break
+			}
+			<-timer.C
+		}
+	}()
 }
 
 func (client *ServiceClient) startBeatTask(param vo.BeatTaskParam) {
@@ -475,6 +506,45 @@ func (client *ServiceClient) startBeatTask(param vo.BeatTaskParam) {
 			<-timer.C
 		}
 	}()
+}
+
+func (client *ServiceClient) keepAliveTask(clientConfig constant.ClientConfig,
+	serverConfigs []constant.ServerConfig, agent http_agent.IHttpAgent, param vo.KeepAliveParam) (err error) {
+	// 心跳参数检查
+	if len(param.Ip) <= 0 {
+		err = errors.New("[client.StartBeatTask] param.Ip can not be empty")
+	}
+	if param.Port <= 0 {
+		err = errors.New("[client.StartBeatTask] param.Port can not be zero")
+	}
+	if len(param.ServiceName) <= 0 {
+		err = errors.New("[client.StartBeatTask] param.ServiceName can not be empty")
+	}
+	if err != nil {
+		client.mutex.Lock()
+		client.beating = false
+		client.mutex.Unlock()
+		log.Println("client.StartBeatTask failed")
+		return
+	}
+	// http 请求
+	if err == nil {
+		params := util.TransformObject2Param(param)
+		for _, serverConfig := range serverConfigs {
+			path := client.buildBasePath(serverConfig) + constant.SERVICE_BASE_PATH + "/health/instance"
+			errBeat := keepalive(agent, path, clientConfig.TimeoutMs, params)
+			if errBeat == nil {
+				break
+			} else {
+				if _, ok := errBeat.(*nacos_error.NacosError); ok {
+					break
+				} else {
+					log.Print("[client.StartBeatTask] send beat failed:", errBeat.Error())
+				}
+			}
+		}
+	}
+	return
 }
 
 func (client *ServiceClient) beatTask(clientConfig constant.ClientConfig,
@@ -528,6 +598,32 @@ func (client *ServiceClient) beatTask(clientConfig constant.ClientConfig,
 					} else {
 						log.Print("[client.StartBeatTask] send beat failed:", errBeat.Error())
 					}
+				}
+			}
+		}
+	}
+	return
+}
+
+func keepalive(agent http_agent.IHttpAgent, path string, timeoutMs uint64,
+	params map[string]string) (err error) {
+	header := map[string][]string{
+		"Content-Type": {"application/x-www-form-urlencoded"},
+	}
+	log.Println("[client.StartBeatTask] request url:", path, " ;params:", params, " ;header:", header)
+	var response *http.Response
+	response, err = agent.Put(path, header, timeoutMs, params)
+	if err == nil {
+		bytes, errRead := ioutil.ReadAll(response.Body)
+		defer response.Body.Close()
+		if errRead != nil {
+			err = errRead
+		} else {
+			if response.StatusCode == 200 {
+				log.Print("[client.StartBeatTask] send beat success:" + string(bytes))
+			} else {
+				err = &nacos_error.NacosError{
+					ErrMsg: "[client.StartBeatTask] send beat failed:[" + strconv.Itoa(response.StatusCode) + "]" + string(bytes),
 				}
 			}
 		}

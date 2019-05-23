@@ -28,6 +28,8 @@ type IServiceClient interface {
 	GetServiceInstance(param vo.GetServiceInstanceParam) (vo.ServiceInstance, error)
 	// 开始发送心跳的任务  只有在service.healthCheckMode = client的情况下才有效
 	StartBeatTask(param vo.BeatTaskParam) error
+	// 主动发送消息保活
+	KeepAlive(param vo.KeepAliveParam) error
 	// 停止发送心跳的任务  当前一次发送心跳任务完成后  结束
 	StopBeatTask()
 	// 获取service的基本信息

@@ -84,15 +84,15 @@ type BeatTaskParam struct {
 	Metadata    map[string]string `json:"metadata"`
 }
 
-//type BeatHealthyParam struct {
-//	ServiceName string `json:"serviceName"`
-//	GroupName   string `json:"groupName"`
-//	NamespaceId string `json:"namespaceId"`
-//	ClusterName string `json:"clusterName"`
-//	Ip          string `json:"ip"`
-//	Port        uint64 `json:"port"`
-//	Healthy     bool   `json:"healthy"`
-//}
+type KeepAliveParam struct {
+	ServiceName string `json:"serviceName"`
+	GroupName   string `json:"groupName"`
+	NamespaceId string `json:"namespaceId"`
+	ClusterName string `json:"clusterName"`
+	Ip          string `json:"ip"`
+	Port        uint64 `json:"port"`
+	Healthy     bool   `json:"healthy"`
+}
 
 type GetServiceDetailParam struct {
 	ServiceName string `param:"serviceName"`
