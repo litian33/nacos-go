@@ -27,14 +27,16 @@ type Host struct {
 	Port        uint64            `json:"port"`
 	Ip          string            `json:"ip"`
 	Weight      float64           `json:"weight"`
-	Metadata    map[string]string `json:"metadata"`
+	Healthy     bool              `json:"healthy"`
+	Enabled     bool              `json:"enabled"`
+	Ephemeral   bool              `param:"ephemeral"`
 	ClusterName string            `json:"clusterName"`
 	ServiceName string            `json:"serviceName"`
-	Enable      bool              `json:"enable"`
+	Metadata    map[string]string `json:"metadata"`
 }
 
 type Service struct {
-	Dom             string            `json:"dom"`
+	ServiceName     string            `json:"dom"`
 	CacheMillis     uint64            `json:"cacheMillis"`
 	UseSpecifiedURL bool              `json:"useSpecifiedUrl"`
 	Hosts           []Host            `json:"hosts"`
@@ -53,13 +55,18 @@ type ServiceSummary struct {
 }
 
 type ServiceSummaryList struct {
-	ServiceList []ServiceSummary `json:"serviceList"`
-	Count       uint32           `json:"count"`
+	ServiceList []string `json:"doms"`
+	Count       uint32   `json:"count"`
 }
 
 type ServiceDetail struct {
-	Service  ServiceInfo `json:"service"`
-	Clusters []Cluster   `json:"clusters"`
+	Metadata         map[string]string `json:"metadata"`
+	GroupName        string            `param:"groupName"`
+	NamespaceId      string            `param:"namespaceId"`
+	Name             string            `json:"name"`
+	ProtectThreshold float64           `json:"protectThreshold"`
+	Selector         ServiceSelector   `json:"selector"`
+	Clusters         []Cluster         `json:"clusters"`
 }
 
 type ServiceInfo struct {
@@ -73,7 +80,7 @@ type ServiceInfo struct {
 }
 
 type ServiceSelector struct {
-	Selector string
+	Selector string `json:"type"`
 }
 
 type Cluster struct {

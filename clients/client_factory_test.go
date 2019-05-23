@@ -19,10 +19,8 @@ import (
 **/
 
 func TestCreateConfigClientWithoutConfig(t *testing.T) {
-	_, err := CreateConfigClient(map[string]interface{}{
-
-	})
-	assert.NotNil(t,err)
+	_, err := CreateConfigClient(map[string]interface{}{})
+	assert.NotNil(t, err)
 }
 
 func TestCreateConfigClient(t *testing.T) {
@@ -35,7 +33,7 @@ func TestCreateConfigClient(t *testing.T) {
 			cfg,
 		},
 	})
-	assert.Nil(t,err)
+	assert.Nil(t, err)
 	realClient := client.(*config_client.ConfigClient)
 	configs, _ := realClient.GetServerConfig()
 	cfg.ContextPath = "/nacos"
@@ -44,10 +42,8 @@ func TestCreateConfigClient(t *testing.T) {
 }
 
 func TestCreateServiceClientWithoutConfig(t *testing.T) {
-	_, err := CreateServiceClient(map[string]interface{}{
-
-	})
-	assert.NotNil(t,err)
+	_, err := CreateServiceClient(map[string]interface{}{})
+	assert.NotNil(t, err)
 }
 
 func TestCreateServiceClient(t *testing.T) {
@@ -60,7 +56,7 @@ func TestCreateServiceClient(t *testing.T) {
 			cfg,
 		},
 	})
-	assert.Nil(t,err)
+	assert.Nil(t, err)
 	realClient := client.(*service_client.ServiceClient)
 	configs, _ := realClient.GetServerConfig()
 	cfg.ContextPath = "/nacos"
@@ -82,13 +78,13 @@ func TestSetConfig(t *testing.T) {
 		"clientConfig":  clientConfig,
 		"serverConfigs": serverConfigs,
 	})
-	assert.Nil(t,err)
+	assert.Nil(t, err)
 	clientConfig.BeatInterval = 5 * 1000
 	clientConfig.ListenInterval = 10 * 1000
-	clientConfig.SubscribeInterval = 10*1000
+	clientConfig.SubscribeInterval = 10 * 1000
 	cc, _ := client.(*nacos_client.NacosClient).GetClientConfig()
 	sc, _ := client.(*nacos_client.NacosClient).GetServerConfig()
 	assert.Equal(t, clientConfig, cc)
-	assert.Equal(t,1,len(serverConfigs))
+	assert.Equal(t, 1, len(serverConfigs))
 	assert.Equal(t, serverConfigs[0], sc[0])
 }

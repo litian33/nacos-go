@@ -113,7 +113,7 @@ func ExampleServiceClient_LogoutServiceInstance() {
 		ServiceName: "demoservice",
 		Ip:          "10.0.0.10",
 		Port:        8848,
-		Cluster:     "a",
+		ClusterName: "a",
 	})
 	fmt.Println(success)
 }
@@ -134,7 +134,7 @@ func ExampleServiceClient_StartBeatTask() {
 		Ip: "10.0.0.10",
 		//Port:    8848,
 		//Cluster: "a",
-		Dom: "demoservice",
+		ServiceName: "demoservice",
 	})
 	time.Sleep(20 * time.Second)
 }
@@ -171,7 +171,7 @@ func ExampleServiceClient_Subscribe() {
 	_ = client.Subscribe(vo.SubscribeParam{
 		ServiceName: "unit",
 		//Clusters:    []string{"a"},
-		SubscribeCallback: func(services []vo.SubscribeService,err error) {
+		SubscribeCallback: func(services []vo.SubscribeService, err error) {
 			fmt.Println(err)
 			fmt.Println(services)
 		},

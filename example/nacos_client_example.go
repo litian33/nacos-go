@@ -10,13 +10,12 @@ import (
 
 /**
 *
-* @description : 
+* @description :
 *
 * @author : codezhang
 *
 * @create : 2019-01-15 11:59
 **/
-
 
 func ExampleNacosClient_GetNamespace() {
 	client := nacos_client.NacosClient{}

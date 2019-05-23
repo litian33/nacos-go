@@ -29,6 +29,9 @@ func TransformObject2Param(object interface{}) (params map[string]string) {
 		numField := valueOf.NumField()
 		for i := 0; i < numField; i++ {
 			tag := typeOf.Field(i).Tag.Get("param")
+			if len(tag) == 0 {
+				tag = typeOf.Field(i).Tag.Get("json")
+			}
 			if len(tag) > 0 && tag != "-" {
 				switch valueOf.Field(i).Kind() {
 				case reflect.Int, reflect.Int8, reflect.Int16,

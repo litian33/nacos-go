@@ -2,7 +2,7 @@ package nacos_error
 
 /**
 *
-* @description : 
+* @description :
 *
 * @author : codezhang
 *
@@ -13,6 +13,6 @@ type NacosError struct {
 	ErrMsg string
 }
 
-func (err *NacosError)Error() (str string) {
+func (err *NacosError) Error() (str string) {
 	return err.ErrMsg
-} 
+}

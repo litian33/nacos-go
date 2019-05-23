@@ -16,7 +16,6 @@ import (
 * @create : 2019-01-08 11:25
 **/
 
-
 func ExampleCreateConfigClient_GetConfig() {
 	client, _ := clients.CreateConfigClient(map[string]interface{}{
 		"serverConfigs": []constant.ServerConfig{
@@ -47,4 +46,3 @@ func ExampleCreateServiceClient_GetServiceDetail() {
 	})
 	fmt.Println(service)
 }
-

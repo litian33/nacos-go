@@ -98,6 +98,7 @@ func Test_RegisterServiceInstance(t *testing.T) {
 			"weight":      "0",
 			"enable":      "false",
 			"healthy":     "false",
+			"ephemeral":   "false",
 		})).Times(1).
 		Return(http_agent.FakeHttpResponse(200, `ok`), nil)
 
@@ -133,6 +134,7 @@ func Test_RegisterServiceInstanceWithErrorResponse_Body(t *testing.T) {
 			"weight":      "0",
 			"enable":      "false",
 			"healthy":     "false",
+			"ephemeral":   "false",
 		})).Times(1).
 		Return(http_agent.FakeHttpResponse(200, `false`), nil)
 
@@ -167,6 +169,7 @@ func Test_RegisterServiceInstanceWithErrorResponse_401(t *testing.T) {
 			"weight":      "0",
 			"enable":      "false",
 			"healthy":     "false",
+			"ephemeral":   "false",
 		})).Times(1).
 		Return(http_agent.FakeHttpResponse(401, `no auth`), nil)
 
@@ -241,7 +244,8 @@ func Test_LogoutServiceInstance(t *testing.T) {
 				"serviceName": "DEMO",
 				"ip":          "10.0.0.10",
 				"port":        "80",
-				"cluster":     "DEFAULT",
+				"clusterName": "DEFAULT",
+				"ephemeral":   "false",
 			},
 		)).Times(1).
 		Return(http_agent.FakeHttpResponse(200, `ok`), nil)
@@ -255,7 +259,8 @@ func Test_LogoutServiceInstance(t *testing.T) {
 		ServiceName: "DEMO",
 		Ip:          "10.0.0.10",
 		Port:        80,
-		Cluster:     "DEFAULT",
+		ClusterName: "DEFAULT",
+		Ephemeral:   false,
 	})
 	assert.Equal(t, nil, err)
 	assert.Equal(t, true, success)
@@ -277,7 +282,8 @@ func Test_LogoutServiceInstanceWithErrorResponse_Body(t *testing.T) {
 				"serviceName": "DEMO",
 				"ip":          "10.0.0.10",
 				"port":        "80",
-				"cluster":     "DEFAULT",
+				"clusterName": "DEFAULT",
+				"ephemeral":   "false",
 			},
 		)).Times(1).
 		Return(http_agent.FakeHttpResponse(200, `false`), nil)
@@ -291,7 +297,7 @@ func Test_LogoutServiceInstanceWithErrorResponse_Body(t *testing.T) {
 		ServiceName: "DEMO",
 		Ip:          "10.0.0.10",
 		Port:        80,
-		Cluster:     "DEFAULT",
+		ClusterName: "DEFAULT",
 	})
 	assert.NotNil(t, err)
 }
@@ -312,7 +318,8 @@ func Test_LogoutServiceInstanceWithErrorResponse_401(t *testing.T) {
 				"serviceName": "DEMO",
 				"ip":          "10.0.0.10",
 				"port":        "80",
-				"cluster":     "DEFAULT",
+				"clusterName": "DEFAULT",
+				"ephemeral":   "false",
 			},
 		)).Times(1).
 		Return(http_agent.FakeHttpResponse(401, `no auth`), nil)
@@ -326,7 +333,7 @@ func Test_LogoutServiceInstanceWithErrorResponse_401(t *testing.T) {
 		ServiceName: "DEMO",
 		Ip:          "10.0.0.10",
 		Port:        80,
-		Cluster:     "DEFAULT",
+		ClusterName: "DEFAULT",
 	})
 	assert.NotNil(t, err)
 }
@@ -337,7 +344,7 @@ func Test_LogoutServiceInstanceWithoutIp(t *testing.T) {
 		ServiceName: "DEMO",
 		Ip:          "",
 		Port:        80,
-		Cluster:     "aa",
+		ClusterName: "aa",
 	})
 	assert.NotNil(t, err)
 }
@@ -348,7 +355,7 @@ func Test_LogoutServiceInstanceWithInvalidPort_0(t *testing.T) {
 		ServiceName: "DEMO",
 		Ip:          "10.0.0.1",
 		Port:        0,
-		Cluster:     "aa",
+		ClusterName: "aa",
 	})
 	assert.NotNil(t, err)
 }
@@ -359,7 +366,7 @@ func Test_LogoutServiceInstanceWithInvalidPort_65536(t *testing.T) {
 		ServiceName: "DEMO",
 		Ip:          "10.0.0.1",
 		Port:        65536,
-		Cluster:     "aa",
+		ClusterName: "aa",
 	})
 	assert.NotNil(t, err)
 }
@@ -370,7 +377,7 @@ func Test_LogoutServiceInstanceWithoutCluster(t *testing.T) {
 		ServiceName: "DEMO",
 		Ip:          "10.0.0.1",
 		Port:        80,
-		Cluster:     "",
+		ClusterName: "",
 	})
 	assert.NotNil(t, err)
 }
@@ -381,7 +388,7 @@ func Test_LogoutServiceInstanceWithoutServiceName(t *testing.T) {
 		ServiceName: "",
 		Ip:          "10.0.0.1",
 		Port:        80,
-		Cluster:     "cluster",
+		ClusterName: "cluster",
 	})
 	assert.NotNil(t, err)
 }
@@ -403,7 +410,10 @@ func Test_ModifyServiceInstance(t *testing.T) {
 			"ip":          "10.0.0.10",
 			"port":        "80",
 			"weight":      "0",
-			"cluster":     "DEFAULT",
+			"clusterName": "DEFAULT",
+			"ephemeral":   "false",
+			"enable":      "false",
+			"healthy":     "false",
 		})).Times(1).
 		Return(http_agent.FakeHttpResponse(200, `ok`), nil)
 	client := ServiceClient{}
@@ -415,7 +425,8 @@ func Test_ModifyServiceInstance(t *testing.T) {
 		ServiceName: "DEMO",
 		Ip:          "10.0.0.10",
 		Port:        80,
-		Cluster:     "DEFAULT",
+		ClusterName: "DEFAULT",
+		Ephemeral:   false,
 	})
 	assert.Equal(t, nil, err)
 	assert.Equal(t, true, success)
@@ -436,7 +447,10 @@ func Test_ModifyServiceInstanceWithErrorResponse_Body(t *testing.T) {
 			"ip":          "10.0.0.10",
 			"port":        "80",
 			"weight":      "0",
-			"cluster":     "DEFAULT",
+			"clusterName": "DEFAULT",
+			"ephemeral":   "false",
+			"enable":      "false",
+			"healthy":     "false",
 		})).Times(1).
 		Return(http_agent.FakeHttpResponse(200, `false`), nil)
 	client := ServiceClient{}
@@ -448,7 +462,7 @@ func Test_ModifyServiceInstanceWithErrorResponse_Body(t *testing.T) {
 		ServiceName: "DEMO",
 		Ip:          "10.0.0.10",
 		Port:        80,
-		Cluster:     "DEFAULT",
+		ClusterName: "DEFAULT",
 	})
 	assert.NotNil(t, err)
 }
@@ -468,7 +482,10 @@ func Test_ModifyServiceInstanceWithErrorResponse_401(t *testing.T) {
 			"ip":          "10.0.0.10",
 			"port":        "80",
 			"weight":      "0",
-			"cluster":     "DEFAULT",
+			"clusterName": "DEFAULT",
+			"ephemeral":   "false",
+			"enable":      "false",
+			"healthy":     "false",
 		})).Times(1).
 		Return(http_agent.FakeHttpResponse(401, `no auth`), nil)
 	client := ServiceClient{}
@@ -480,7 +497,7 @@ func Test_ModifyServiceInstanceWithErrorResponse_401(t *testing.T) {
 		ServiceName: "DEMO",
 		Ip:          "10.0.0.10",
 		Port:        80,
-		Cluster:     "DEFAULT",
+		ClusterName: "DEFAULT",
 	})
 	assert.NotNil(t, err)
 }
@@ -491,7 +508,7 @@ func Test_ModifyServiceInstanceWithoutIp(t *testing.T) {
 		ServiceName: "DEMO",
 		Ip:          "",
 		Port:        80,
-		Cluster:     "aa",
+		ClusterName: "aa",
 	})
 	assert.NotNil(t, err)
 }
@@ -502,7 +519,7 @@ func Test_ModifyServiceInstanceWithInvalidPort_0(t *testing.T) {
 		ServiceName: "DEMO",
 		Ip:          "10.0.0.1",
 		Port:        0,
-		Cluster:     "aa",
+		ClusterName: "aa",
 	})
 	assert.NotNil(t, err)
 }
@@ -513,7 +530,7 @@ func Test_ModifyServiceInstanceWithInvalidPort_65536(t *testing.T) {
 		ServiceName: "DEMO",
 		Ip:          "10.0.0.1",
 		Port:        65536,
-		Cluster:     "aa",
+		ClusterName: "aa",
 	})
 	assert.NotNil(t, err)
 }
@@ -524,7 +541,7 @@ func Test_ModifyServiceInstanceWithoutCluster(t *testing.T) {
 		ServiceName: "DEMO",
 		Ip:          "10.0.0.1",
 		Port:        80,
-		Cluster:     "",
+		ClusterName: "",
 	})
 	assert.NotNil(t, err)
 }
@@ -535,7 +552,7 @@ func Test_ModifyServiceInstanceWithoutServiceName(t *testing.T) {
 		ServiceName: "",
 		Ip:          "10.0.0.1",
 		Port:        80,
-		Cluster:     "cluster",
+		ClusterName: "cluster",
 	})
 	assert.NotNil(t, err)
 }
@@ -561,13 +578,13 @@ var serviceJsonTest = `{
 			"clusters": ""
 		}`
 
-var serviceTest = vo.Service(vo.Service{Dom: "DEMO",
+var serviceTest = vo.Service(vo.Service{ServiceName: "DEMO",
 	CacheMillis: 1000, UseSpecifiedURL: false,
 	Hosts: []vo.Host{
 		vo.Host{Valid: true, Marked: false, InstanceId: "10.10.10.10-8888-a-DEMO", Port: 0x22b8,
 			Ip:     "10.10.10.10",
 			Weight: 1, Metadata: map[string]string{}, ClusterName: "",
-			ServiceName: "", Enable: false}}, Checksum: "3bbcf6dd1175203a8afdade0e77a27cd1528787794594",
+			ServiceName: "", Enabled: false}}, Checksum: "3bbcf6dd1175203a8afdade0e77a27cd1528787794594",
 	LastRefTime: 0x163f2da7aa2, Env: "", Clusters: "",
 	Metadata: map[string]string(nil)})
 
@@ -672,25 +689,12 @@ func Test_GetServiceWithoutServiceName(t *testing.T) {
 // GetServiceList
 
 var serviceListJsonTest = `{
-    "serviceList": [
-        {
-            "name": "hello", 
-            "clusterCount": 1, 
-            "ipCount": 0, 
-            "healthyInstanceCount": 0
-        }, 
-        {
-            "name": "spring-demo-client", 
-            "clusterCount": 1, 
-            "ipCount": 0, 
-            "healthyInstanceCount": 0
-        }
-    ], 
+    "doms": ["hello","spring-demo-client"], 
     "count": 12
 }`
 
 var serviceListTest = vo.ServiceSummaryList(vo.ServiceSummaryList{
-	ServiceList: []vo.ServiceSummary{{"hello", 1, 0, 0}, {"spring-demo-client", 1, 0, 0}},
+	ServiceList: []string{"hello", "spring-demo-client"},
 	Count:       12})
 
 func Test_GetServiceList(t *testing.T) {
@@ -704,8 +708,8 @@ func Test_GetServiceList(t *testing.T) {
 		gomock.AssignableToTypeOf(http.Header{}),
 		gomock.AssignableToTypeOf(uint64(10*1000)),
 		gomock.Eq(map[string]string{
-			"startPg": "2",
-			"pgSize":  "10",
+			"pageNo":   "2",
+			"pageSize": "10",
 		})).Times(1).
 		Return(http_agent.FakeHttpResponse(200, serviceListJsonTest), nil)
 
@@ -754,6 +758,7 @@ func Test_GetServiceInstance(t *testing.T) {
 				"ip":          "10.10.10.10",
 				"port":        "80",
 				"healthyOnly": "false",
+				"ephemeral":   "false",
 			},
 		)).Times(1).
 		Return(http_agent.FakeHttpResponse(200, serviceInstanceJsonTest), nil)
@@ -788,6 +793,7 @@ func Test_GetServiceInstanceWithErrorResponse_Body(t *testing.T) {
 				"ip":          "10.10.10.10",
 				"port":        "80",
 				"healthyOnly": "false",
+				"ephemeral":   "false",
 			},
 		)).Times(1).
 		Return(http_agent.FakeHttpResponse(200, ``), nil)
@@ -821,6 +827,7 @@ func Test_GetServiceInstanceWithErrorResponse_401(t *testing.T) {
 				"ip":          "10.10.10.10",
 				"port":        "80",
 				"healthyOnly": "false",
+				"ephemeral":   "false",
 			},
 		)).Times(1).
 		Return(http_agent.FakeHttpResponse(401, `no auth`), nil)
@@ -890,9 +897,9 @@ var serviceDetailJsonTest = `{
 				"metadata":{}
 			},
 			"clusters":[]}`
-var serviceDetailTest = vo.ServiceDetail{Service: vo.ServiceInfo{App: "",
-	Group: "", HealthCheckMode: "client", Metadata: map[string]string{},
-	Name: "DEMO", ProtectThreshold: 0, Selector: vo.ServiceSelector{Selector: ""}},
+var serviceDetailTest = vo.ServiceDetail{
+	GroupName: "", Metadata: map[string]string(nil),
+	Name: "DEMO", ProtectThreshold: 0, Selector: vo.ServiceSelector{Selector: ""},
 	Clusters: []vo.Cluster{}}
 
 func Test_GetServiceDetail(t *testing.T) {
@@ -997,21 +1004,23 @@ func Test_beatTask(t *testing.T) {
 		ctrl.Finish()
 	}()
 	mockIHttpAgent := mock.NewMockIHttpAgent(ctrl)
-	mockIHttpAgent.EXPECT().Get(
-		gomock.Eq("http://console.nacos.io:80/nacos/v1/ns/catalog/serviceDetail"),
-		gomock.AssignableToTypeOf(http.Header{}),
-		gomock.Eq(uint64(10*1000)),
-		gomock.Eq(map[string]string{
-			"serviceName": "demo",
-		})).Times(1).
-		Return(http_agent.FakeHttpResponse(200, serviceDetailJsonTest), nil)
+	//mockIHttpAgent.EXPECT().Get(
+	//	gomock.Eq("http://console.nacos.io:80/nacos/v1/ns/catalog/serviceDetail"),
+	//	gomock.AssignableToTypeOf(http.Header{}),
+	//	gomock.Eq(uint64(10*1000)),
+	//	gomock.Eq(map[string]string{
+	//		"serviceName": "demo",
+	//	})).Times(1).
+	//	Return(http_agent.FakeHttpResponse(200, serviceDetailJsonTest), nil)
 	mockIHttpAgent.EXPECT().Post(
-		gomock.Eq("http://console.nacos.io:80/nacos/v1/ns/api/clientBeat"),
+		gomock.Eq("http://console.nacos.io:80/nacos/v1/ns/instance/beat"),
 		gomock.AssignableToTypeOf(http.Header{}),
 		gomock.Eq(uint64(10*1000)),
-		gomock.Eq(map[string]string{
-			"dom":  "demo",
-			"beat": `{"ip":"10.0.0.1","port":0,"weight":0,"dom":"demo","cluster":"","metadata":null}`,
+		gomock.Eq(map[string]interface{}{
+			"serviceName": "demo",
+			"groupName":   "",
+			"ephemeral":   false,
+			"beat":        `{"ip":"10.0.0.1","port":0,"weight":0,"serviceName":"demo","groupName":"","ephemeral":false,"cluster":"","metadata":null}`,
 		})).AnyTimes().
 		Return(http_agent.FakeHttpResponse(200, `living`), nil)
 	client := ServiceClient{}
@@ -1021,8 +1030,8 @@ func Test_beatTask(t *testing.T) {
 	_ = client.SetServerConfig([]constant.ServerConfig{serverConfigTest})
 	client.beating = true
 	err := client.beatTask(clientConfigTest, []constant.ServerConfig{serverConfigTest}, mockIHttpAgent, vo.BeatTaskParam{
-		Ip:  "10.0.0.1",
-		Dom: "demo",
+		Ip:          "10.0.0.1",
+		ServiceName: "demo",
 	})
 	assert.Nil(t, err)
 	assert.True(t, client.beating)
@@ -1034,21 +1043,23 @@ func Test_beatTaskWithErrorResponse_401(t *testing.T) {
 		ctrl.Finish()
 	}()
 	mockIHttpAgent := mock.NewMockIHttpAgent(ctrl)
-	mockIHttpAgent.EXPECT().Get(
-		gomock.Eq("http://console.nacos.io:80/nacos/v1/ns/catalog/serviceDetail"),
-		gomock.AssignableToTypeOf(http.Header{}),
-		gomock.Eq(uint64(10*1000)),
-		gomock.Eq(map[string]string{
-			"serviceName": "demo",
-		})).Times(1).
-		Return(http_agent.FakeHttpResponse(200, serviceDetailJsonTest), nil)
+	//mockIHttpAgent.EXPECT().Get(
+	//	gomock.Eq("http://console.nacos.io:80/nacos/v1/ns/catalog/serviceDetail"),
+	//	gomock.AssignableToTypeOf(http.Header{}),
+	//	gomock.Eq(uint64(10*1000)),
+	//	gomock.Eq(map[string]string{
+	//		"serviceName": "demo",
+	//	})).Times(1).
+	//	Return(http_agent.FakeHttpResponse(200, serviceDetailJsonTest), nil)
 	mockIHttpAgent.EXPECT().Post(
-		gomock.Eq("http://console.nacos.io:80/nacos/v1/ns/api/clientBeat"),
+		gomock.Eq("http://console.nacos.io:80/nacos/v1/ns/instance/beat"),
 		gomock.AssignableToTypeOf(http.Header{}),
 		gomock.Eq(uint64(10*1000)),
-		gomock.Eq(map[string]string{
-			"dom":  "demo",
-			"beat": `{"ip":"10.0.0.1","port":0,"weight":0,"dom":"demo","cluster":"","metadata":null}`,
+		gomock.Eq(map[string]interface{}{
+			"serviceName": "demo",
+			"groupName":   "",
+			"ephemeral":   false,
+			"beat":        `{"ip":"10.0.0.1","port":0,"weight":0,"serviceName":"demo","groupName":"","ephemeral":false,"cluster":"","metadata":null}`,
 		})).AnyTimes().
 		Return(http_agent.FakeHttpResponse(401, `no auth`), nil)
 	client := ServiceClient{}
@@ -1058,8 +1069,8 @@ func Test_beatTaskWithErrorResponse_401(t *testing.T) {
 	_ = client.SetServerConfig([]constant.ServerConfig{serverConfigTest})
 	client.beating = true
 	err := client.beatTask(clientConfigTest, []constant.ServerConfig{serverConfigTest}, mockIHttpAgent, vo.BeatTaskParam{
-		Ip:  "10.0.0.1",
-		Dom: "demo",
+		Ip:          "10.0.0.1",
+		ServiceName: "demo",
 	})
 	assert.Nil(t, err)
 	assert.True(t, client.beating)
@@ -1075,8 +1086,8 @@ func Test_beatTaskWithoutIp(t *testing.T) {
 	client.INacosClient = &nacos_client.NacosClient{}
 	client.beating = true
 	err := client.beatTask(clientConfigTest, []constant.ServerConfig{serverConfigTest}, mockIHttpAgent, vo.BeatTaskParam{
-		Ip:  "",
-		Dom: "demo",
+		Ip:          "",
+		ServiceName: "demo",
 	})
 	assert.NotNil(t, err)
 }
@@ -1091,8 +1102,8 @@ func Test_beatTaskWithoutDom(t *testing.T) {
 	client.INacosClient = &nacos_client.NacosClient{}
 	client.beating = true
 	err := client.beatTask(clientConfigTest, []constant.ServerConfig{serverConfigTest}, mockIHttpAgent, vo.BeatTaskParam{
-		Ip:  "ip",
-		Dom: "",
+		Ip:          "ip",
+		ServiceName: "",
 	})
 	assert.NotNil(t, err)
 }

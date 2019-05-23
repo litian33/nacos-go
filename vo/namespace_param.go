@@ -2,7 +2,7 @@ package vo
 
 /**
 *
-* @description : 
+* @description :
 *
 * @author : codezhang
 *

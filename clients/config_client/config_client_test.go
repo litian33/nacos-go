@@ -13,7 +13,7 @@ import (
 
 /**
 *
-* @description : 
+* @description :
 *
 * @author : codezhang
 *
@@ -772,52 +772,52 @@ func Test_AddConfigToListenWithRepeatAdd(t *testing.T) {
 	client := cretateConfigClientTest()
 	client.listening = true
 	configs := []vo.ConfigParam{{
-		DataId:  "dataId",
-		Group:   "group",
+		DataId: "dataId",
+		Group:  "group",
 	}}
 	addConfigs := []vo.ConfigParam{{
-		DataId:  "dataId",
-		Group:   "group",
-	},{
-		DataId:  "dataId2",
-		Group:   "group",
-	},{
-		DataId:  "dataId3",
-		Group:   "group",
+		DataId: "dataId",
+		Group:  "group",
+	}, {
+		DataId: "dataId2",
+		Group:  "group",
+	}, {
+		DataId: "dataId3",
+		Group:  "group",
 	}}
 	client.localConfigs = configs
 	err := client.AddConfigToListen(addConfigs)
 	assert.Nil(t, err)
-	assert.Equal(t,addConfigs,client.localConfigs)
+	assert.Equal(t, addConfigs, client.localConfigs)
 }
 
 func Test_AddConfigToListen(t *testing.T) {
 	client := cretateConfigClientTest()
 	client.listening = true
 	configs := []vo.ConfigParam{{
-		DataId:  "dataId",
-		Group:   "group",
+		DataId: "dataId",
+		Group:  "group",
 	}}
 	addConfigs := []vo.ConfigParam{
 		{
-		DataId:  "dataId2",
-		Group:   "group",
-	},{
-		DataId:  "dataId3",
-		Group:   "group",
-	}}
+			DataId: "dataId2",
+			Group:  "group",
+		}, {
+			DataId: "dataId3",
+			Group:  "group",
+		}}
 	resultConfigs := []vo.ConfigParam{{
-		DataId:  "dataId",
-		Group:   "group",
-	},{
-		DataId:  "dataId2",
-		Group:   "group",
-	},{
-		DataId:  "dataId3",
-		Group:   "group",
+		DataId: "dataId",
+		Group:  "group",
+	}, {
+		DataId: "dataId2",
+		Group:  "group",
+	}, {
+		DataId: "dataId3",
+		Group:  "group",
 	}}
 	client.localConfigs = configs
 	err := client.AddConfigToListen(addConfigs)
 	assert.Nil(t, err)
-	assert.Equal(t,resultConfigs,client.localConfigs)
+	assert.Equal(t, resultConfigs, client.localConfigs)
 }

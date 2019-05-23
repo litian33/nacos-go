@@ -39,6 +39,8 @@ const (
 	SPLIT_CONFIG_INNER     = string(rune(2))
 	KEY_LISTEN_CONFIGS     = "Listening-Configs"
 	KEY_SERVICE_NAME       = "serviceName"
+	KEY_GROUP_NAME         = "groupName"
+	KEY_EPHEMERAL          = "ephemeral"
 	KEY_IP                 = "ip"
 	KEY_PORT               = "port"
 	KEY_WEIGHT             = "weight"

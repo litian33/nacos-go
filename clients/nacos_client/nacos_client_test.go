@@ -74,7 +74,7 @@ func Test_SetClientConfigWithoutBeatIntervalAndListenInterval(t *testing.T) {
 	})
 	assert.Nil(t, err)
 	config, _ := client.GetClientConfig()
-	clientConfigTest.SubscribeInterval = 10*1000
+	clientConfigTest.SubscribeInterval = 10 * 1000
 	assert.Equal(t, clientConfigTest, config)
 }
 

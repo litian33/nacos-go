@@ -137,7 +137,7 @@ func (client *ServiceClient) LogoutServiceInstance(param vo.LogoutServiceInstanc
 	if err == nil && (param.Port <= 0 || param.Port > 65535) {
 		err = errors.New("[client.LogoutServiceInstance] param.Port invalid")
 	}
-	if err == nil && len(param.Cluster) <= 0 {
+	if err == nil && len(param.ClusterName) <= 0 {
 		err = errors.New("[client.LogoutServiceInstance] param.Cluster can not be empty")
 	}
 	var clientConfig constant.ClientConfig
@@ -206,7 +206,7 @@ func (client *ServiceClient) ModifyServiceInstance(param vo.ModifyServiceInstanc
 	if err == nil && len(param.ServiceName) <= 0 {
 		err = errors.New("[client.ModifyServiceInstance] param.ServiceName can not be empty")
 	}
-	if err == nil && len(param.Cluster) <= 0 {
+	if err == nil && len(param.ClusterName) <= 0 {
 		err = errors.New("[client.ModifyServiceInstance] param.Cluster can not be empty")
 	}
 	var clientConfig constant.ClientConfig
@@ -483,8 +483,8 @@ func (client *ServiceClient) beatTask(clientConfig constant.ClientConfig,
 	if len(param.Ip) <= 0 {
 		err = errors.New("[client.StartBeatTask] param.Ip can not be empty")
 	}
-	if err == nil && len(param.Dom) <= 0 {
-		err = errors.New("[client.StartBeatTask] param.Dom can not be empty")
+	if err == nil && len(param.ServiceName) <= 0 {
+		err = errors.New("[client.StartBeatTask] param.ServiceName can not be empty")
 	}
 	if err != nil {
 		client.mutex.Lock()
@@ -492,29 +492,33 @@ func (client *ServiceClient) beatTask(clientConfig constant.ClientConfig,
 		client.mutex.Unlock()
 		log.Println("client.StartBeatTask failed")
 	}
-	// 检查service的健康检查模式
-	if err == nil {
-		serviceDetail, err := client.GetServiceDetail(vo.GetServiceDetailParam{
-			ServiceName: param.Dom,
-		})
-		if err != nil {
-			log.Println(err)
-		}
-		if serviceDetail.Service.HealthCheckMode != "client" {
-			log.Println("[client.StartBeatTask] service.HealthCheckMode != 'client',sending a heartbeat is invalid")
-		}
-	}
+	// TODO 检查service的健康检查模式
+	//if err == nil {
+	//	serviceDetail, err := client.GetServiceDetail(vo.GetServiceDetailParam{
+	//		ServiceName: param.ServiceName,
+	//	})
+	//	if err != nil {
+	//		log.Println(err)
+	//	}
+	//	if serviceDetail.Service.HealthCheckMode != "client" {
+	//		log.Println("[client.StartBeatTask] service.HealthCheckMode != 'client',sending a heartbeat is invalid")
+	//	}
+	//}
 	// http 请求
 	if err == nil {
 		params := make(map[string]string)
-		params[constant.KEY_DOM] = param.Dom
+		//params := util.TransformObject2Param(param)
+		params[constant.KEY_SERVICE_NAME] = param.ServiceName
+		params[constant.KEY_GROUP_NAME] = param.GroupName
+		params[constant.KEY_EPHEMERAL] = strconv.FormatBool(param.Ephemeral)
 		paramBytes, errMarshal := json.Marshal(param)
 		if errMarshal != nil {
 			log.Println(errMarshal)
 		} else {
 			params[constant.KEY_BEAT] = string(paramBytes)
 			for _, serverConfig := range serverConfigs {
-				path := client.buildBasePath(serverConfig) + constant.SERVICE_BASE_PATH + "/api/clientBeat"
+				path := client.buildBasePath(serverConfig) + constant.SERVICE_BASE_PATH + "/instance/beat"
+				//path := client.buildBasePath(serverConfig) + constant.SERVICE_BASE_PATH + "/health/instance"
 				errBeat := beat(agent, path, clientConfig.TimeoutMs, params)
 				if errBeat == nil {
 					break
@@ -582,6 +586,7 @@ func (client *ServiceClient) GetServiceDetail(param vo.GetServiceDetailParam) (s
 				constant.SERVICE_BASE_PATH + "/catalog/serviceDetail"
 			serviceDetail, err = getServiceDetail(agent, path, clientConfig.TimeoutMs, params)
 			if err == nil {
+				serviceDetail.Name = param.ServiceName
 				break
 			} else {
 				if _, ok := err.(*nacos_error.NacosError); ok {
@@ -653,7 +658,7 @@ func (client *ServiceClient) Subscribe(param vo.SubscribeParam) (err error) {
 func subscribeServiceTask(param vo.SubscribeParam, serverConfigs []constant.ServerConfig, clientConfig constant.ClientConfig,
 	agent http_agent.IHttpAgent, client *ServiceClient) {
 	params := util.TransformObject2Param(param)
-	params["healthyOnly"] = "false"
+	//params["healthyOnly"] = "false"
 	go func() {
 		for {
 			// 创建计时器
@@ -687,7 +692,7 @@ func subscribeServiceTask(param vo.SubscribeParam, serverConfigs []constant.Serv
 					subscribeService.ClusterName = host.ClusterName
 					subscribeService.Weight = host.Weight
 					subscribeService.InstanceId = host.InstanceId
-					subscribeService.Enable = host.Enable
+					subscribeService.Enable = host.Enabled
 					subscribeServices = append(subscribeServices, subscribeService)
 				}
 				param.SubscribeCallback(subscribeServices, nil)
