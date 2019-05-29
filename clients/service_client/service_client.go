@@ -333,7 +333,7 @@ func (client *ServiceClient) GetServiceList(param vo.GetServiceListParam) (servi
 	if err == nil {
 		params := util.TransformObject2Param(param)
 		for _, serverConfig := range serverConfigs {
-			path := client.buildBasePath(serverConfig) + constant.SERVICE_CATALOG_PATH + "/serviceList"
+			path := client.buildBasePath(serverConfig) + constant.SERVICE_BASE_PATH + "/service/list"
 			service, err = getServiceList(agent, path, clientConfig.TimeoutMs, params)
 			if err == nil {
 				break
