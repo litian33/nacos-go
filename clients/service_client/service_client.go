@@ -679,7 +679,7 @@ func (client *ServiceClient) GetServiceDetail(param vo.GetServiceDetailParam) (s
 		params := util.TransformObject2Param(param)
 		for _, serverConfig := range serverConfigs {
 			path := client.buildBasePath(serverConfig) +
-				constant.SERVICE_BASE_PATH + "/catalog/serviceDetail"
+				constant.SERVICE_BASE_PATH + "/service"
 			serviceDetail, err = getServiceDetail(agent, path, clientConfig.TimeoutMs, params)
 			if err == nil {
 				serviceDetail.Name = param.ServiceName
