@@ -17,13 +17,15 @@ func TestHeartBeat(t *testing.T) {
 	client, err := nacosClient("172.24.28.3:8848")
 	assert.Nil(t, err)
 	assert.NotNil(t, client)
-	param := vo.RegisterServiceInstanceParam{Ip: "172.22.1.102", Port: 33333, ServiceName: "testxxx", Enable: true, Healthy: true, Ephemeral: true}
-	res, err := client.RegisterServiceInstance(param)
-	assert.Nil(t, err)
-	assert.NotNil(t, res)
+	//param := vo.RegisterServiceInstanceParam{Ip: "172.22.1.102", Port: 33333, ServiceName: "testxxx", Enable: true, Healthy: true, Ephemeral: true}
+	//res, err := client.RegisterServiceInstance(param)
+	//assert.Nil(t, err)
+	//assert.NotNil(t, res)
 
 	//param1 := vo.KeepAliveParam{Ip: "172.22.1.102", Port: 8848, ServiceName: "testxxx", Healthy:true}
-	param1 := vo.BeatTaskParam{Ip: "172.22.1.102", Port: 3333, ServiceName: "testxxx"}
+	xxx := make(map[string]string)
+	xxx["node_type"]="xxxxx"
+	param1 := vo.BeatTaskParam{Ip: "172.22.1.102", Port: 3335, ServiceName: "xxxxxxxxx", Metadata:xxx, Ephemeral:true}
 
 	client.StartBeatTask(param1)
 	//client.KeepAlive(param1)
