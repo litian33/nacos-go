@@ -588,7 +588,6 @@ func (client *ServiceClient) beatTask(clientConfig constant.ClientConfig,
 			params[constant.KEY_BEAT] = string(paramBytes)
 			for _, serverConfig := range serverConfigs {
 				path := client.buildBasePath(serverConfig) + constant.SERVICE_BASE_PATH + "/instance/beat"
-				//path := client.buildBasePath(serverConfig) + constant.SERVICE_BASE_PATH + "/health/instance"
 				errBeat := beat(agent, path, clientConfig.TimeoutMs, params)
 				if errBeat == nil {
 					break
@@ -638,7 +637,7 @@ func beat(agent http_agent.IHttpAgent, path string, timeoutMs uint64,
 	}
 	log.Println("[client.StartBeatTask] request url:", path, " ;params:", params, " ;header:", header)
 	var response *http.Response
-	response, err = agent.Post(path, header, timeoutMs, params)
+	response, err = agent.Put(path, header, timeoutMs, params)
 	if err == nil {
 		bytes, errRead := ioutil.ReadAll(response.Body)
 		defer response.Body.Close()

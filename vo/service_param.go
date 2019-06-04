@@ -81,6 +81,7 @@ type BeatTaskParam struct {
 	GroupName   string            `json:"groupName"`
 	Ephemeral   bool              `json:"ephemeral"`
 	Cluster     string            `json:"cluster"`
+	Scheduled   bool              `json:"scheduled"`
 	Metadata    map[string]string `json:"metadata"`
 }
 
